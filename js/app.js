@@ -3,6 +3,7 @@
 
   const TRANSITION_KEY = 'web-optique-page-transition';
   const TRANSITION_MS = 560;
+  let navigating = false;
 
   const loader = document.getElementById('loader');
   const finishLoader = () => {
@@ -63,7 +64,7 @@
       transition.classList.add('active');
 
       window.setTimeout(() => {
-        window.location.href = url.href;
+        window.location.assign(url.href);
       }, TRANSITION_MS);
     });
   });
