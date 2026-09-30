@@ -58,6 +58,8 @@
       if (!transition) return;
 
       event.preventDefault();
+      if (navigating) return;
+      navigating = true;
       sessionStorage.setItem(TRANSITION_KEY, '1');
       transition.classList.remove('active');
       void transition.offsetWidth;
