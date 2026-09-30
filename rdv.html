@@ -149,30 +149,30 @@
         <p>Sélectionnez l'option qui correspond le mieux à votre besoin</p>
       </div>
       <div class="motif-grid" id="motifGrid">
-        <div class="motif" data-motif="Examen de vue">
+        <button type="button" class="motif" data-motif="Examen de vue">
           <div class="motif-ic"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
           <h3>Examen de vue</h3>
           <p>Contrôle visuel complet et prescription</p>
-        </div>
-        <div class="motif" data-motif="Adaptation lentilles">
+        </button>
+        <button type="button" class="motif" data-motif="Adaptation lentilles">
           <div class="motif-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></div>
           <h3>Adaptation lentilles</h3>
           <p>Essai, adaptation et suivi</p>
-        </div>
-        <div class="motif" data-motif="Fond d'œil">
+        </button>
+        <button type="button" class="motif" data-motif="Fond d'œil">
           <div class="motif-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
           <h3>Fond d'œil</h3>
           <p>Examen approfondi de la rétine</p>
-        </div>
-        <div class="motif" data-motif="Urgence / Douleur">
+        </button>
+        <button type="button" class="motif" data-motif="Urgence / Douleur">
           <div class="motif-ic"><svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/><path d="M12 10v5M12 18v.5"/></svg></div>
           <h3>Urgence</h3>
           <p>Consultation rapide pour douleur</p>
-        </div>
+        </button>
       </div>
     </div>
 
-    <div class="calendar-wrap reveal" id="calendarSection" style="display:none">
+    <div class="calendar-wrap rdv-panel" id="calendarSection" hidden>
       <div class="calendar-head">
         <button class="cal-nav" id="prevMonth">‹</button>
         <h3 id="calMonthYear"></h3>
@@ -182,13 +182,13 @@
       <p class="cal-hint" id="calHint">Sélectionnez une date disponible</p>
     </div>
 
-    <div class="slots-wrap reveal" id="slotsSection" style="display:none">
+    <div class="slots-wrap rdv-panel" id="slotsSection" hidden>
       <h3>Créneaux disponibles</h3>
       <div class="slots-sub" id="slotDate"></div>
       <div class="slots-grid" id="slotsGrid"></div>
     </div>
 
-    <div class="recap-form reveal" id="recapSection" style="display:none">
+    <div class="recap-form rdv-panel" id="recapSection" hidden>
       <div class="recap">
         <h3>Récapitulatif</h3>
         <div class="recap-row"><span>Motif</span><span id="recapMotif">—</span></div>
@@ -206,7 +206,7 @@
       </form>
     </div>
 
-    <div class="confirm reveal" id="confirmSection" style="display:none">
+    <div class="confirm rdv-panel" id="confirmSection" hidden>
       <div class="confirm-check">✓</div>
       <h2>Rendez-vous confirmé !</h2>
       <p>Votre consultation est bien réservée. Un SMS de rappel vous sera envoyé 48h avant.</p>
