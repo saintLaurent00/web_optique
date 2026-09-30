@@ -1,7 +1,13 @@
 (() => {
   'use strict';
 
-  const state = { motif: null, date: null, slot: null, viewDate: new Date() };
+  const state = {
+    motif: null,
+    date: null,
+    slot: null,
+    viewDate: new Date()
+  };
+
   const monthNames = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
   const dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 
@@ -14,25 +20,27 @@
     form: $('rdvForm')
   };
 
-  if (!els.calendar || !els.slots || !els.recap || !els.confirm) return;
+  if (!els.calendar || !els.slots || !els.recap || !els.confirm || !els.form) return;
 
   const scrollToPanel = (el) => {
     if (!el) return;
-    window.requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
 
-  const showPanel = (el, display = 'block') => {
+  const showPanel = (el) => {
     if (!el) return;
-    el.style.display = display;
+    el.hidden = false;
     el.classList.remove('visible', 'is-visible');
-    window.requestAnimationFrame(() => el.classList.add('visible', 'is-visible'));
+    requestAnimationFrame(() => {
+      el.classList.add('visible', 'is-visible');
+    });
   };
 
   const hidePanel = (el) => {
     if (!el) return;
-    el.style.display = 'none';
+    el.hidden = true;
     el.classList.remove('visible', 'is-visible');
   };
 
@@ -44,7 +52,7 @@
     });
   };
 
-  const resetAfterMotif = () => {
+  const resetBookingAfterMotif = () => {
     state.date = null;
     state.slot = null;
     hidePanel(els.slots);
@@ -52,47 +60,41 @@
     hidePanel(els.confirm);
   };
 
-  document.querySelectorAll('.motif').forEach((motif) => {
-    motif.addEventListener('click', () => {
-      document.querySelectorAll('.motif').forEach((item) => item.classList.remove('selected'));
-      motif.classList.add('selected');
-      state.motif = motif.dataset.motif || motif.textContent.trim();
-      resetAfterMotif();
-      updateSteps(2);
-      renderCalendar();
-      showPanel(els.calendar);
-      scrollToPanel(els.calendar);
-    });
-  });
-
   function renderCalendar() {
     const calendarDays = $('calendarDays');
     const monthTitle = $('calMonthYear');
     if (!calendarDays || !monthTitle) return;
 
-    const view = state.viewDate;
-    const year = view.getFullYear();
-    const month = view.getMonth();
-    monthTitle.textContent = `${monthNames[month]} ${year}`;
+    const year = state.viewDate.getFullYear();
+    const month = state.viewDate.getMonth();
+    monthTitle.textContent = monthNames[month] + ' ' + year;
 
     const first = new Date(year, month, 1);
     const last = new Date(year, month + 1, 0);
     const startDay = (first.getDay() + 6) % 7;
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let html = dayNames.map((day) => `<div class="cal-day-name">${day}</div>`).join('');
-    for (let i = 0; i < startDay; i++) {
+    let html = dayNames.map((day) => '<div class="cal-day-name">' + day + '</div>').join('');
+
+    for (let i = 0; i < startDay; i += 1) {
       html += '<div class="cal-day empty" aria-hidden="true"></div>';
     }
 
-    for (let day = 1; day <= last.getDate(); day++) {
+    for (let day = 1; day <= last.getDate(); day += 1) {
       const date = new Date(year, month, day);
       const weekend = date.getDay() === 0 || date.getDay() === 6;
       const available = date >= today && !weekend;
       const todayClass = date.getTime() === today.getTime() ? ' today' : '';
       const selectedClass = state.date && state.date.getTime() === date.getTime() ? ' selected' : '';
-      html += `<button type="button" class="cal-day ${available ? 'available' : 'disabled'}${todayClass}${selectedClass}" data-day="${day}" ${available ? '' : 'disabled'}>${day}</button>`;
+
+      html += '<button type="button" class="cal-day ' +
+        (available ? 'available' : 'disabled') +
+        todayClass + selectedClass +
+        '" data-day="' + day + '"' +
+        (available ? '' : ' disabled') +
+        '>' + day + '</button>';
     }
 
     calendarDays.innerHTML = html;
@@ -107,23 +109,15 @@
       });
     });
 
-    const todayMonth = today.getFullYear() * 12 + today.getMonth();
     const currentMonth = year * 12 + month;
-    if ($('prevMonth')) $('prevMonth').disabled = currentMonth <= todayMonth;
+    const todayMonth = today.getFullYear() * 12 + today.getMonth();
+    const prev = $('prevMonth');
+    if (prev) prev.disabled = currentMonth <= todayMonth;
   }
-
-  $('prevMonth')?.addEventListener('click', () => {
-    state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
-    renderCalendar();
-  });
-
-  $('nextMonth')?.addEventListener('click', () => {
-    state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
-    renderCalendar();
-  });
 
   function showSlots() {
     if (!state.date) return;
+
     const grid = $('slotsGrid');
     const dateLabel = $('slotDate');
     if (!grid || !dateLabel) return;
@@ -133,9 +127,15 @@
     const available = slots.filter((_, index) => (index + seed) % 3 !== 0);
 
     dateLabel.textContent = state.date.toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
-    grid.innerHTML = available.map((slot) => `<button type="button" class="slot" data-slot="${slot}">${slot}</button>`).join('');
+
+    grid.innerHTML = available
+      .map((slot) => '<button type="button" class="slot" data-slot="' + slot + '">' + slot + '</button>')
+      .join('');
 
     grid.querySelectorAll('.slot').forEach((button) => {
       button.addEventListener('click', () => {
@@ -153,42 +153,87 @@
 
   function showRecap() {
     if (!state.date || !state.slot) return;
+
     $('recapMotif').textContent = state.motif || '—';
     $('recapDate').textContent = state.date.toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long'
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
     $('recapSlot').textContent = state.slot;
-    showPanel(els.recap, 'grid');
+
+    showPanel(els.recap);
     scrollToPanel(els.recap);
   }
 
-  els.form?.addEventListener('submit', (event) => {
+  document.querySelectorAll('.motif').forEach((motif) => {
+    motif.addEventListener('click', () => {
+      document.querySelectorAll('.motif').forEach((item) => item.classList.remove('selected'));
+      motif.classList.add('selected');
+
+      state.motif = motif.dataset.motif || motif.textContent.trim();
+      state.viewDate = new Date();
+      resetBookingAfterMotif();
+
+      updateSteps(2);
+      renderCalendar();
+      showPanel(els.calendar);
+      scrollToPanel(els.calendar);
+    });
+  });
+
+  $('prevMonth')?.addEventListener('click', () => {
+    state.viewDate = new Date(
+      state.viewDate.getFullYear(),
+      state.viewDate.getMonth() - 1,
+      1
+    );
+    renderCalendar();
+  });
+
+  $('nextMonth')?.addEventListener('click', () => {
+    state.viewDate = new Date(
+      state.viewDate.getFullYear(),
+      state.viewDate.getMonth() + 1,
+      1
+    );
+    renderCalendar();
+  });
+
+  els.form.addEventListener('submit', (event) => {
     event.preventDefault();
+
+    if (!state.motif || !state.date || !state.slot) return;
 
     const name = $('fName')?.value.trim();
     const email = $('fEmail')?.value.trim();
     const phone = $('fPhone')?.value.trim();
 
     if (!name || !email || !phone) {
-      els.form.reportValidity?.();
+      els.form.reportValidity();
       return;
     }
 
+    const phoneInput = $('fPhone');
     if (!/^[\d\s+().-]{10,}$/.test(phone)) {
-      $('fPhone')?.setCustomValidity('Veuillez saisir un numéro de téléphone valide.');
-      $('fPhone')?.reportValidity();
-      $('fPhone')?.setCustomValidity('');
+      phoneInput?.setCustomValidity('Veuillez saisir un numéro de téléphone valide.');
+      phoneInput?.reportValidity();
+      phoneInput?.setCustomValidity('');
       return;
     }
 
-    $('confMotif').textContent = state.motif || '—';
-    $('confDate').textContent = state.date.toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long'
-    }) + ' à ' + state.slot;
+    $('confMotif').textContent = state.motif;
+    $('confDate').textContent =
+      state.date.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }) + ' à ' + state.slot;
 
     hidePanel(els.recap);
     showPanel(els.confirm);
-    updateSteps(4);
     scrollToPanel(els.confirm);
   });
 
