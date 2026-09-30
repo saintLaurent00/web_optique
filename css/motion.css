@@ -1,0 +1,379 @@
+/* =========================================================
+   Precision in Motion
+   Motion system for web_optique
+   ========================================================= */
+
+:root {
+  --motion-fast: 180ms;
+  --motion-normal: 450ms;
+  --motion-slow: 800ms;
+  --motion-reveal: 1000ms;
+  --ease-standard: cubic-bezier(.16, 1, .3, 1);
+  --ease-smooth: cubic-bezier(.22, 1, .36, 1);
+  --ease-exit: cubic-bezier(.77, 0, .18, 1);
+}
+
+/* Keep motion quiet by default. */
+html { scroll-behavior: smooth; }
+
+.reveal,
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.motion-reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity var(--motion-reveal) var(--ease-standard),
+    transform var(--motion-reveal) var(--ease-standard);
+  will-change: opacity, transform;
+}
+
+.reveal-left { transform: translate3d(-32px, 0, 0); }
+.reveal-right { transform: translate3d(32px, 0, 0); }
+
+.reveal.is-visible,
+.reveal-up.is-visible,
+.reveal-left.is-visible,
+.reveal-right.is-visible,
+.motion-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.motion-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 700ms var(--ease-standard),
+    transform 700ms var(--ease-standard);
+}
+.motion-stagger.is-visible > * { opacity: 1; transform: translate3d(0,0,0); }
+.motion-stagger.is-visible > *:nth-child(2) { transition-delay: 70ms; }
+.motion-stagger.is-visible > *:nth-child(3) { transition-delay: 140ms; }
+.motion-stagger.is-visible > *:nth-child(4) { transition-delay: 210ms; }
+.motion-stagger.is-visible > *:nth-child(5) { transition-delay: 280ms; }
+.motion-stagger.is-visible > *:nth-child(6) { transition-delay: 350ms; }
+
+/* Header: stable, slightly denser after entering the page. */
+.header {
+  transition:
+    padding 550ms var(--ease-standard),
+    background-color 450ms var(--ease-standard),
+    backdrop-filter 450ms var(--ease-standard),
+    border-color 450ms var(--ease-standard);
+}
+
+.header.scrolled {
+  box-shadow: 0 10px 35px rgba(15,15,15,.035);
+}
+
+.logo-mark {
+  transition: transform 550ms var(--ease-standard);
+}
+.logo:hover .logo-mark { transform: scale(.92) rotate(-8deg); }
+
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 450ms var(--ease-standard);
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Buttons: tactile, not magnetic. */
+.btn,
+button {
+  transition:
+    transform 250ms var(--ease-standard),
+    background-color 250ms var(--ease-standard),
+    color 250ms var(--ease-standard),
+    border-color 250ms var(--ease-standard),
+    box-shadow 250ms var(--ease-standard);
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active,
+button:active {
+  transform: translateY(0) scale(.985);
+}
+
+/* Hero signature: build, hold, react. */
+.hero-iris,
+.iris,
+.hero-eye {
+  transform-origin: center;
+}
+
+.hero-iris {
+  animation: precision-iris-in 1400ms var(--ease-standard) 350ms both;
+}
+@keyframes precision-iris-in {
+  from { opacity: 0; transform: scale(.84); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.hero-pupil,
+.iris-pupil,
+.pupil {
+  transition:
+    transform 600ms var(--ease-smooth),
+    width 600ms var(--ease-smooth),
+    height 600ms var(--ease-smooth);
+}
+
+.hero-content > * {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: hero-content-in 800ms var(--ease-standard) forwards;
+}
+.hero-content > *:nth-child(1) { animation-delay: 650ms; }
+.hero-content > *:nth-child(2) { animation-delay: 780ms; }
+.hero-content > *:nth-child(3) { animation-delay: 900ms; }
+.hero-content > *:nth-child(4) { animation-delay: 1020ms; }
+
+@keyframes hero-content-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll progress stays informative rather than decorative. */
+.progress-bar {
+  transition: width 120ms linear;
+  will-change: width;
+}
+
+.nav-dot {
+  transition:
+    transform 400ms var(--ease-standard),
+    background-color 300ms var(--ease-standard),
+    opacity 300ms var(--ease-standard);
+}
+
+/* Cards: optical precision, no aggressive 3D tilt. */
+.service-card,
+.card,
+.pathology-card,
+.tech-card {
+  transition:
+    transform 500ms var(--ease-standard),
+    box-shadow 500ms var(--ease-standard),
+    border-color 400ms var(--ease-standard);
+}
+.service-card:hover,
+.card:hover,
+.pathology-card:hover,
+.tech-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Technology: one scan when entering the viewport. */
+.technology-scan,
+.tech-scan,
+.scanner-line {
+  position: relative;
+  overflow: hidden;
+}
+.technology-scan::after,
+.tech-scan::after,
+.scanner-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(94,234,212,.95),
+    transparent
+  );
+  opacity: 0;
+}
+.technology-scan.is-scanning::after,
+.tech-scan.is-scanning::after,
+.scanner-line.is-scanning::after {
+  opacity: 1;
+  animation: precision-scan 1200ms var(--ease-standard) both;
+}
+@keyframes precision-scan {
+  from { transform: translateX(0); }
+  to { transform: translateX(1240%); }
+}
+
+/* Timeline: line first, nodes second, content third. */
+.timeline-line {
+  transform-origin: top center;
+}
+.timeline-line.is-active {
+  animation: timeline-fill 1000ms var(--ease-standard) both;
+}
+@keyframes timeline-fill {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+.timeline-node {
+  transition:
+    transform 450ms var(--ease-standard),
+    background-color 350ms var(--ease-standard),
+    border-color 350ms var(--ease-standard);
+}
+.timeline-node.is-active {
+  transform: scale(1.15);
+}
+
+/* Pathology/diagnosis focus. */
+.pathology-card.is-focused {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(15,118,110,.12);
+}
+.pathology-card.is-focused .pathology-icon {
+  transform: scale(1.06);
+}
+.pathology-icon {
+  transition: transform 500ms var(--ease-standard);
+}
+
+/* FAQ should answer, not perform. */
+.faq-item {
+  transition: border-color 350ms var(--ease-standard);
+}
+.faq-item .faq-answer {
+  transition:
+    max-height 600ms var(--ease-smooth),
+    opacity 400ms var(--ease-standard);
+}
+
+/* Booking: explicit state transitions. */
+.booking-step,
+.booking-panel,
+.booking-section,
+#slotsSection,
+#recapSection,
+#confirmSection {
+  transition:
+    opacity 450ms var(--ease-standard),
+    transform 550ms var(--ease-standard);
+}
+
+.booking-step.is-active,
+.step.active {
+  transform: translateY(-1px);
+}
+
+.slot {
+  transition:
+    transform 220ms var(--ease-standard),
+    background-color 220ms var(--ease-standard),
+    color 220ms var(--ease-standard),
+    border-color 220ms var(--ease-standard);
+}
+.slot:hover { transform: translateY(-2px); }
+.slot.selected { transform: scale(.98); }
+
+.calendar-day {
+  transition:
+    transform 180ms var(--ease-standard),
+    background-color 220ms var(--ease-standard),
+    color 220ms var(--ease-standard);
+}
+.calendar-day:hover { transform: scale(1.05); }
+
+#confirmSection {
+  animation: confirmation-enter 850ms var(--ease-standard) both;
+}
+@keyframes confirmation-enter {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Reduce ambient motion: particles should not dominate the page. */
+.particles,
+#particles,
+.particle-canvas {
+  opacity: .45;
+}
+
+/* Touch-first behavior. */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
+  button, a { cursor: pointer; }
+
+  .cursor-dot,
+  .cursor-ring,
+  .cursor-label,
+  .nav-dots {
+    display: none !important;
+  }
+
+  .service-card:hover,
+  .card:hover,
+  .pathology-card:hover,
+  .tech-card:hover {
+    transform: none;
+  }
+
+  .btn:hover { transform: none; }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --motion-reveal: 700ms;
+  }
+
+  .hero-content > * {
+    animation-duration: 650ms;
+  }
+
+  .progress-bar { height: 2px; }
+
+  .particles,
+  #particles,
+  .particle-canvas {
+    opacity: .18;
+  }
+}
+
+/* Accessibility: motion is optional. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .reveal-up,
+  .reveal-left,
+  .reveal-right,
+  .motion-reveal,
+  .motion-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .particles,
+  #particles,
+  .particle-canvas {
+    display: none !important;
+  }
+}
