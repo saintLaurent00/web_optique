@@ -6,7 +6,12 @@
   let navigating = false;
 
   const loader = document.getElementById('loader');
+  let loaderTimer = null;
+  let loaderFallback = null;
+
   const finishLoader = () => {
+    if (loaderTimer) clearTimeout(loaderTimer);
+    if (loaderFallback) clearTimeout(loaderFallback);
     if (loader) loader.classList.add('done');
   };
 
@@ -14,23 +19,30 @@
 
   if (cameFromTransition) {
     sessionStorage.removeItem(TRANSITION_KEY);
-    requestAnimationFrame(() => finishLoader());
+    requestAnimationFrame(finishLoader);
   } else {
     const loaderPercent = document.getElementById('loaderPercent');
+    let progressInterval = null;
+
     if (loaderPercent) {
       let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 8;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-        }
+      progressInterval = setInterval(() => {
+        progress = Math.min(100, progress + Math.random() * 12);
         loaderPercent.textContent = String(Math.floor(progress)).padStart(2, '0');
-      }, 60);
+        if (progress >= 100) clearInterval(progressInterval);
+      }, 50);
     }
 
-    window.addEventListener('load', () => setTimeout(finishLoader, 450), { once: true });
-    setTimeout(finishLoader, 1800);
+    loaderTimer = setTimeout(finishLoader, 500);
+    loaderFallback = setTimeout(finishLoader, 1200);
+
+    if (document.readyState !== 'loading') {
+      requestAnimationFrame(() => setTimeout(finishLoader, 180));
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(finishLoader, 180);
+      }, { once: true });
+    }
   }
 
   const burger = document.getElementById('burger');
