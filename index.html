@@ -3119,6 +3119,7 @@ function renderCalendar(){
       const day=Number(el.dataset.day);
       state.date=new Date(year,month,day);
       state.slot=null;
+      updateSteps(3);
       renderCalendar();
       showSlots();
     });
