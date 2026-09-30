@@ -19,14 +19,14 @@ body{cursor:none}
 a,button,.slot,.cal-day,.motif,.faq-item{cursor:none}
 
 /* ---------- LOADER / PAGE TRANSITION ---------- */
-.loader-iris svg{animation:loaderRevealSpin 3.6s linear 1}
+.loader-iris svg{animation:loaderRevealSpin 1.2s linear 1}
 .loader-pupil{animation:loaderPupil 1.4s var(--ease-smooth) infinite}
-.loader-bar::after{animation:loaderFill 1.9s var(--ease-exit) forwards}
+.loader-bar::after{animation:loaderFill 1.1s var(--ease-exit) forwards}
 @keyframes loaderRevealSpin{from{transform:rotate(-70deg) scale(.82);opacity:0}to{transform:rotate(290deg) scale(1);opacity:1}}
 @keyframes loaderPupil{0%,100%{transform:scale(1)}50%{transform:scale(.72)}}
 
-.page-transition{will-change:transform}
-.page-transition.active{animation:pageSlide 850ms var(--ease-exit) forwards}
+.page-transition{will-change:transform;pointer-events:none}
+.page-transition.active{animation:pageSlide 560ms var(--ease-exit) forwards}
 
 /* ---------- HEADER ---------- */
 .header{will-change:padding,background-color,backdrop-filter}
