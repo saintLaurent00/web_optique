@@ -1522,7 +1522,7 @@ button{font-family:inherit;cursor:none;border:none;background:none}
   .services-grid,.motif-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
   
   .bento{grid-template-columns:repeat(2,1fr);grid-template-rows:auto}
-  .bento-item.large,.bento-item.wide{grid-column:span 2;grid-row:auto}
+  .bento-item.large,.bento-item.wide,.bento-item.bottom-wide{grid-column:span 2;grid-row:auto}
   .bento-item.large h3{font-size:32px}
   
   .journey{grid-template-columns:repeat(3,1fr);gap:30px}
@@ -1661,7 +1661,7 @@ button{font-family:inherit;cursor:none;border:none;background:none}
   .patho-section{padding:80px 20px}
   .bento{grid-template-columns:1fr;grid-template-rows:auto;gap:14px}
   .bento-item{padding:24px;min-height:180px}
-  .bento-item.large,.bento-item.wide{grid-column:span 1}
+  .bento-item.large,.bento-item.wide,.bento-item.bottom-wide{grid-column:span 1}
   .bento-item.large{min-height:280px}
   .bento-item.large h3{font-size:28px}
   .bento-item.large p{font-size:14px}
