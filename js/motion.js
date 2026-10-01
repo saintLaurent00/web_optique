@@ -77,10 +77,16 @@
   }
 
   function booking(){
-    const steps=qsa('.step'),stepBar=qs('.steps');if(!stepBar)return;const update=()=>{const active=steps.findIndex(s=>s.classList.contains('active'));const i=Math.max(0,active);stepBar.style.setProperty('--booking-progress',(((i+1)/Math.max(1,steps.length))*100)+'%');stepBar.classList.add('booking-progress');};update();
+    const steps=qsa('.step'),stepBar=qs('.steps');
+    if(!stepBar)return;
+    const update=()=>{
+      const active=steps.findIndex(s=>s.classList.contains('active'));
+      const i=Math.max(0,active);
+      stepBar.style.setProperty('--booking-progress',(((i+1)/Math.max(1,steps.length))*100)+'%');
+      stepBar.classList.add('booking-progress');
+    };
+    update();
     new MutationObserver(update).observe(stepBar,{attributes:true,subtree:true,attributeFilter:['class']});
-    const container=qs('.rdv-container');if(!container)return;
-    new MutationObserver(()=>{qsa('.slot,.cal-day,.motif',container).forEach(el=>{if(el.dataset.motionBound)return;el.dataset.motionBound='1';el.addEventListener('click',()=>el.animate([{transform:'scale(1)'},{transform:'scale(.965)'},{transform:'scale(1)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'}));});update();}).observe(container,{childList:true,subtree:true});
   }
 
   function init(){qs('.hero')?.classList.add('is-motion-ready');revealTargets();header();globalScrollProgress();sectionProgress();heroIris();timeline();journey();technology();servicesDrag();cursor();booking();}
