@@ -221,6 +221,7 @@ a,button,.slot,.cal-day,.motif,.faq-item{cursor:none}
 .footer a:hover{transform:translateX(3px)}
 
 /* ---------- BOOKING ---------- */
+.rdv-panel[hidden]{display:none!important}
 .rdv-hero h1{overflow:hidden}
 .steps{position:relative}
 .steps::after{
