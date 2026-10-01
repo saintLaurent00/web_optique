@@ -76,18 +76,7 @@
     qsa('a,button,.slot,.cal-day,.motif,.faq-item').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
   }
 
-  function booking(){
-    const steps=qsa('.step'),stepBar=qs('.steps');
-    if(!stepBar)return;
-    const update=()=>{
-      const active=steps.findIndex(s=>s.classList.contains('active'));
-      const i=Math.max(0,active);
-      stepBar.style.setProperty('--booking-progress',(((i+1)/Math.max(1,steps.length))*100)+'%');
-      stepBar.classList.add('booking-progress');
-    };
-    update();
-    new MutationObserver(update).observe(stepBar,{attributes:true,subtree:true,attributeFilter:['class']});
-  }
+  function booking(){ return; }
 
   function init(){qs('.hero')?.classList.add('is-motion-ready');revealTargets();header();globalScrollProgress();sectionProgress();heroIris();timeline();journey();technology();servicesDrag();cursor();booking();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
