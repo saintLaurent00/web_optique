@@ -906,7 +906,8 @@ button{font-family:inherit;cursor:none;border:none;background:none}
 .bento-item.large h3{color:var(--cream);font-size:40px}
 .bento-item.large p{color:rgba(245,241,234,.8)}
 .bento-item.wide{grid-column:span 2}
-.bento-item.bottom-wide{grid-column:span 2}
+.bento-item.bottom-narrow{grid-column:span 1}
+.bento-item.bottom-wide{grid-column:span 3}
 .bento-ic{
   width:56px;height:56px;border-radius:14px;
   background:var(--cream);
