@@ -179,7 +179,6 @@
       updateSteps(2);
       renderCalendar();
       showPanel(els.calendar);
-      scrollToPanel(els.calendar);
     });
   });
 
