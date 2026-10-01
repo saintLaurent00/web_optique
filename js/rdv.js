@@ -22,26 +22,12 @@
 
   if (!els.calendar || !els.slots || !els.recap || !els.confirm || !els.form) return;
 
-  const scrollToPanel = (el) => {
-    if (!el) return;
-    requestAnimationFrame(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  };
-
   const showPanel = (el) => {
-    if (!el) return;
-    el.hidden = false;
-    el.classList.remove('visible', 'is-visible');
-    requestAnimationFrame(() => {
-      el.classList.add('visible', 'is-visible');
-    });
+    if (el) el.hidden = false;
   };
 
   const hidePanel = (el) => {
-    if (!el) return;
-    el.hidden = true;
-    el.classList.remove('visible', 'is-visible');
+    if (el) el.hidden = true;
   };
 
   const updateSteps = (active) => {
@@ -148,7 +134,6 @@
     });
 
     showPanel(els.slots);
-    scrollToPanel(els.slots);
   }
 
   function showRecap() {
@@ -164,7 +149,6 @@
     $('recapSlot').textContent = state.slot;
 
     showPanel(els.recap);
-    scrollToPanel(els.recap);
   }
 
   document.querySelectorAll('.motif').forEach((motif) => {
@@ -233,7 +217,6 @@
 
     hidePanel(els.recap);
     showPanel(els.confirm);
-    scrollToPanel(els.confirm);
   });
 
   hidePanel(els.calendar);
